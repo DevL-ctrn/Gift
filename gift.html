@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Feliz Aniversário - Rosa Especial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #ffffff;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            color: #1e1a16;
+        }
+
+        .stage {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .step {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0.6s;
+            background: #ffffff;
+            padding: 1rem;
+        }
+
+        .step.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        .birthday-card {
+            background: #ffffff;
+            padding: 2rem 2.5rem;
+            border-radius: 28px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+            border: 1px solid #f0e4d8;
+            max-width: 90%;
+            width: 540px;
+        }
+
+        .birthday-card h1 {
+            font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+            font-size: 2.6rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #b34a20;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .birthday-card p {
+            font-size: 1.15rem;
+            font-weight: 450;
+            color: #5e3e2c;
+            margin-top: 0.3rem;
+            line-height: 1.45;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        .rose-wrapper {
+            background: #ffffff;
+            border-radius: 48px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f2e0d2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .rose-icon {
+            font-size: 6rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05));
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            animation: gentleSway 3s infinite ease-in-out;
+            display: inline-block;
+            order: 1;
+        }
+
+        .rose-text {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #b4522a;
+            background: #fefaf7;
+            display: inline-block;
+            padding: 0.3rem 1.2rem;
+            border-radius: 100px;
+            border: 0.5px solid #f0dccd;
+            order: 2;
+        }
+
+        .dialog-card {
+            background: #ffffff;
+            padding: 2rem 1.8rem 1.8rem;
+            border-radius: 32px;
+            max-width: 90%;
+            width: 460px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            border: 1px solid #ece1d6;
+        }
+
+        .dialog-card p {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #9b4a28;
+            margin-bottom: 1.6rem;
+            line-height: 1.3;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.6rem 1.6rem;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f6f2ee;
+            color: #3f2c1f;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-yes {
+            background: #dc7a4a;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background: #c76534;
+            transform: translateY(-1px);
+        }
+
+        .btn-no {
+            background: #ece4dc;
+            color: #5a3a28;
+        }
+
+        .btn-no:hover {
+            background: #e0d4ca;
+        }
+
+        .hint-text {
+            margin-top: 30px;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.85rem;
+            color: #a77c60;
+            background: #ffffff;
+            padding: 5px 18px;
+            border-radius: 60px;
+            letter-spacing: -0.2px;
+            font-weight: 430;
+        }
+
+        @keyframes gentleSway {
+            0% { transform: rotate(0deg) translateY(0px);}
+            60% { transform: rotate(2deg) translateY(-3px);}
+            100% { transform: rotate(-1deg) translateY(0px);}
+        }
+
+        @media (max-width: 600px) {
+            .birthday-card h1 { font-size: 2rem; }
+            .birthday-card p { font-size: 0.95rem; }
+            .rose-icon { font-size: 4.2rem; }
+            .dialog-card p { font-size: 1.2rem; }
+            .btn { font-size: 0.9rem; padding: 0.5rem 1.2rem; }
+            .birthday-card { padding: 1.4rem; }
+            .rose-text { font-size: 0.95rem; }
+        }
+
+        .confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="stage">
+    <div id="step1" class="step active">
+        <div class="birthday-card">
+            <h1>Happy birthday!<br> 🎉</h1>
+            <p></p>
+        </div>
+        <div class="hint-text">
+            Ready??
+        </div>
+    </div>
+
+    <div id="step2" class="step">
+        <div class="rose-wrapper">
+            <div class="rose-icon" id="roseEmoji">
+                🌹
+            </div>
+            <div class="rose-text">
+                uma rosa para você
+            </div>
+        </div>
+    </div>
+
+    <div id="step3" class="step">
+        <div class="dialog-card" id="dialogCard">
+            <p>🌸 Gostou da surpresa? 🌸</p>
+            <div class="button-group" id="buttonGroup">
+                <button class="btn btn-yes" id="yesBtn">Sim, amei</button>
+                <button class="btn btn-no" id="noBtn">Não gostei</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+<script>
+    (function() {
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        let currentStep = 1;
+
+        function setActiveStep(stepNumber) {
+            step1.classList.remove('active');
+            step2.classList.remove('active');
+            step3.classList.remove('active');
+            if (stepNumber === 1) step1.classList.add('active');
+            if (stepNumber === 2) step2.classList.add('active');
+            if (stepNumber === 3) step3.classList.add('active');
+            currentStep = stepNumber;
+        }
+
+        // TIMING AUMENTADO: Step1 -> Step2 após 7.4 segundos
+        setTimeout(() => {
+            if (currentStep === 1) {
+                setActiveStep(2);
+                gentleConfetti(35);
+                const rose = document.getElementById('roseEmoji');
+                if (rose) {
+                    rose.style.transform = 'scale(1.08)';
+                    setTimeout(() => { if (rose) rose.style.transform = ''; }, 350);
+                }
+            }
+        }, 7400);
+
+        // TIMING AUMENTADO: Exibir diálogo depois que a rosa for mostrada (7.6 segundos)
+        let dialogTriggered = false;
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mut) => {
+                if (mut.attributeName === 'class' && step2.classList.contains('active') && !dialogTriggered) {
+                    dialogTriggered = true;
+                    setTimeout(() => {
+                        if (currentStep === 2) {
+                            setActiveStep(3);
+                            const dialogDiv = document.getElementById('dialogCard');
+                            if (dialogDiv) {
+                                dialogDiv.style.transform = 'scale(0.99)';
+                                setTimeout(() => { if(dialogDiv) dialogDiv.style.transform = ''; }, 200);
+                            }
+                        }
+                    }, 7600);
+                }
+            });
+        });
+        observer.observe(step2, { attributes: true });
+        
+        if (step2.classList.contains('active') && !dialogTriggered) {
+            dialogTriggered = true;
+            setTimeout(() => { if (currentStep === 2) setActiveStep(3); }, 7600);
+        }
+
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const dialogQuestion = document.querySelector('#dialogCard p');
+        const buttonGroup = document.getElementById('buttonGroup');
+        
+        let isLockedOnSecondQuestion = false;
+        const lockedQuestion = "Tem certeza que não gostou? Olha a rosa com carinho 🌹... Gostou?";
+        
+        function setLockedQuestion() {
+            if (dialogQuestion) {
+                dialogQuestion.innerHTML = lockedQuestion;
+            }
+            isLockedOnSecondQuestion = true;
+        }
+
+        function resetToNormalCycle() {
+            isLockedOnSecondQuestion = false;
+            if (dialogQuestion && !dialogQuestion.innerHTML.includes("Que bom")) {
+                dialogQuestion.innerHTML = "Gostou da surpresa? ";
+            }
+        }
+
+        function handleYes() {
+            yesBtn.disabled = true;
+            noBtn.disabled = true;
+            
+            if (dialogQuestion) {
+                dialogQuestion.innerHTML = "Que bom que você gostou! 🎉";
+            }
+            if (buttonGroup) buttonGroup.style.display = 'none';
+            
+            startPartyConfetti();
+            
+            const title = document.querySelector('.birthday-card h1');
+            if (title) {
+                title.style.transition = 'transform 0.2s';
+                title.style.transform = 'scale(1.01)';
+                setTimeout(() => { if(title) title.style.transform = ''; }, 300);
+            }
+        }
+        
+        function handleNo() {
+            noBtn.style.transform = 'scale(0.96)';
+            setTimeout(() => { if(noBtn) noBtn.style.transform = ''; }, 150);
+            
+            if (!isLockedOnSecondQuestion) {
+                setLockedQuestion();
+                const card = document.getElementById('dialogCard');
+                if (card) {
+                    card.style.backgroundColor = '#fefaf7';
+                    setTimeout(() => { if(card) card.style.backgroundColor = '#ffffff'; }, 280);
+                }
+                gentleConfetti(18);
+                yesBtn.disabled = false;
+                noBtn.disabled = false;
+                if (buttonGroup && buttonGroup.style.display === 'none') buttonGroup.style.display = 'flex';
+            } 
+            else {
+                const card = document.getElementById('dialogCard');
+                if (card) {
+                    card.style.transform = 'scale(0.98)';
+                    setTimeout(() => { if(card) card.style.transform = ''; }, 150);
+                    card.style.backgroundColor = '#fff5ed';
+                    setTimeout(() => { if(card) card.style.backgroundColor = '#ffffff'; }, 300);
+                }
+                
+                if (dialogQuestion && dialogQuestion.innerHTML !== lockedQuestion) {
+                    dialogQuestion.innerHTML = lockedQuestion;
+                }
+                
+                yesBtn.style.animation = 'pulseGlow 0.4s ease';
+                setTimeout(() => { if(yesBtn) yesBtn.style.animation = ''; }, 400);
+                gentleConfetti(10);
+                yesBtn.disabled = false;
+                noBtn.disabled = false;
+                if (buttonGroup && buttonGroup.style.display === 'none') buttonGroup.style.display = 'flex';
+            }
+        }
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulseGlow {
+                0% { transform: scale(1); background-color: #dc7a4a; }
+                50% { transform: scale(1.05); background-color: #e58e5e; box-shadow: 0 0 8px rgba(220,122,74,0.5); }
+                100% { transform: scale(1); background-color: #dc7a4a; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        yesBtn.addEventListener('click', handleYes);
+        noBtn.addEventListener('click', handleNo);
+     
+        const step3Observer = new MutationObserver((mutations) => {
+            mutations.forEach((mut) => {
+                if (mut.attributeName === 'class' && step3.classList.contains('active')) {
+                    resetToNormalCycle();
+                    if (buttonGroup) buttonGroup.style.display = 'flex';
+                    yesBtn.disabled = false;
+                    noBtn.disabled = false;
+                }
+            });
+        });
+        step3Observer.observe(step3, { attributes: true });
+
+        const canvas = document.getElementById('confettiCanvas');
+        let ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        function gentleConfetti(partCount = 40) {
+            if (!ctx) return;
+            resizeCanvas();
+            let particles = [];
+            for (let i = 0; i < partCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height * 0.4,
+                    size: Math.random() * 6 + 2,
+                    color: `hsl(${Math.random() * 360}, 70%, 65%)`,
+                    speedY: Math.random() * 4 + 2,
+                    speedX: (Math.random() - 0.5) * 1.3,
+                    rotation: Math.random() * 360,
+                    spin: (Math.random() - 0.5) * 5
+                });
+            }
+            let anim;
+            let start = performance.now();
+            function draw(now) {
+                if (!ctx || !canvas) return;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let alive = false;
+                for (let p of particles) {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.rotation += p.spin;
+                    if (p.y < canvas.height + 60) alive = true;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                }
+                if (alive && (performance.now() - start) < 1600) {
+                    anim = requestAnimationFrame(draw);
+                } else {
+                    cancelAnimationFrame(anim);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            anim = requestAnimationFrame(draw);
+        }
+        
+        function startPartyConfetti() {
+            if (!ctx) return;
+            resizeCanvas();
+            let particles = [];
+            const total = 340;
+            for (let i = 0; i < total; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height * 0.6,
+                    size: Math.random() * 8 + 3,
+                    color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+                    speedY: Math.random() * 7 + 4,
+                    speedX: (Math.random() - 0.5) * 2.5,
+                    rotation: Math.random() * 360,
+                    spin: (Math.random() - 0.5) * 12
+                });
+            }
+            let animId;
+            let startTime = performance.now();
+            function drawHeavy(now) {
+                if (!ctx || !canvas) return;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let isAlive = false;
+                for (let p of particles) {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.rotation += p.spin;
+                    if (p.y < canvas.height + 120) isAlive = true;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                }
+                if (isAlive && (performance.now() - startTime) < 3800) {
+                    animId = requestAnimationFrame(drawHeavy);
+                } else {
+                    cancelAnimationFrame(animId);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            animId = requestAnimationFrame(drawHeavy);
+            
+            for (let i = 0; i < 20; i++) {
+                const floatingRose = document.createElement('div');
+                floatingRose.innerText = '🌹';
+                floatingRose.style.position = 'fixed';
+                floatingRose.style.fontSize = (Math.random() * 28 + 20) + 'px';
+                floatingRose.style.left = Math.random() * window.innerWidth + 'px';
+                floatingRose.style.top = '-40px';
+                floatingRose.style.pointerEvents = 'none';
+                floatingRose.style.zIndex = '10000';
+                floatingRose.style.opacity = '0.85';
+                floatingRose.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))';
+                document.body.appendChild(floatingRose);
+                let yPos = -40;
+                let xPos = parseFloat(floatingRose.style.left);
+                const speed = Math.random() * 3 + 2;
+                const drift = (Math.random() - 0.5) * 1.2;
+                const interval = setInterval(() => {
+                    if (!floatingRose) return clearInterval(interval);
+                    yPos += speed;
+                    xPos += drift;
+                    floatingRose.style.top = yPos + 'px';
+                    floatingRose.style.left = xPos + 'px';
+                    floatingRose.style.transform = `rotate(${yPos * 1.2}deg)`;
+                    if (yPos > window.innerHeight + 100) {
+                        clearInterval(interval);
+                        floatingRose.remove();
+                    }
+                }, 30);
+                setTimeout(() => {
+                    if (floatingRose) floatingRose.style.opacity = '0';
+                    setTimeout(() => floatingRose?.remove(), 800);
+                }, 3700);
+            }
+            
+            for (let i = 0; i < 14; i++) {
+                const heart = document.createElement('div');
+                heart.innerText = '';
+                heart.style.position = 'fixed';
+                heart.style.fontSize = (Math.random() * 22 + 15) + 'px';
+                heart.style.left = Math.random() * window.innerWidth + 'px';
+                heart.style.top = '-20px';
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '10000';
+                heart.style.opacity = '0.8';
+                document.body.appendChild(heart);
+                let hY = -20;
+                const hSpeed = Math.random() * 3.5 + 1.8;
+                const heartInterval = setInterval(() => {
+                    if (!heart) return clearInterval(heartInterval);
+                    hY += hSpeed;
+                    heart.style.top = hY + 'px';
+                    if (hY > window.innerHeight + 70) {
+                        clearInterval(heartInterval);
+                        heart.remove();
+                    }
+                }, 50);
+                setTimeout(() => {
+                    if (heart) heart.style.opacity = '0';
+                    setTimeout(() => heart?.remove(), 700);
+                }, 5000);
+            }
+        }
+        
+        setTimeout(() => {
+            gentleConfetti(28);
+        }, 600);
+        
+        window.addEventListener('resize', () => {
+            if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+    })();
+</script>
+</body>
+</html>
